@@ -1,0 +1,1 @@
+export { TrophySlotFrame } from './TrophySlotFrame';

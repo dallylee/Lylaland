@@ -1,0 +1,52 @@
+npm warn Unknown cli config "--watchAll". This will stop working in the next major version of npm.
+npm warn Unknown cli config "--colors". This will stop working in the next major version of npm.
+
+> sparkle-world@0.1.0 test
+> craco test src/engine/prophecy.test.ts
+
+  console.log
+    [ProgressionEngine] Constructor starting
+
+      at new ProgressionEngineClass (src/engine/ProgressionEngine.ts:101:17)
+
+  console.log
+    [ProgressionEngine] State initialized with DEFAULT_STATE
+
+      at new ProgressionEngineClass (src/engine/ProgressionEngine.ts:104:17)
+
+  console.log
+    [ProgressionEngine] Prophecy expired: disc_home_moonTriple
+
+      at ProgressionEngineClass.handleProphecyExpired (src/engine/ProgressionEngine.ts:853:17)
+
+FAIL src/engine/prophecy.test.ts
+  Prophecy Engine Logic
+    ÔêÜ should not offer a prophecy if mirror is not owned (2 ms)
+    ÔêÜ should offer a prophecy when mirror is owned (1 ms)
+    ÔêÜ should transition to showing when mirror is tapped
+    ÔêÜ should transition to active and set timer when clue is acknowledged
+    ├ù should expire and clear sequence after 24 hours (4 ms)
+    ÔêÜ should re-offer a different prophecy after one is resolved (1 ms)
+
+  ÔùÅ Prophecy Engine Logic ÔÇ║ should expire and clear sequence after 24 hours
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "hidden"
+    Received: "available"
+
+      73 |
+      74 |         const newState = ProgressionEngine.getState();
+    > 75 |         expect(newState.discovery.prophecyState).toBe('hidden');
+         |                                                  ^
+      76 |         expect(newState.discovery.prophecyClueId).toBeNull();
+      77 |         expect(newState.discovery.activeSequence).toBeNull();
+      78 |     });
+
+      at Object.<anonymous> (src/engine/prophecy.test.ts:75:50)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 5 passed, 6 total
+Snapshots:   0 total
+Time:        0.822 s, estimated 2 s
+Ran all test suites matching /src\\engine\\prophecy.test.ts/i.

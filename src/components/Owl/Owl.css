@@ -1,0 +1,249 @@
+/* Owl Component Styles */
+
+.owl-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    cursor: default;
+    transition: transform 0.3s ease;
+}
+
+.owl-container.armed {
+    cursor: pointer;
+}
+
+.owl-container.armed:hover {
+    transform: scale(1.05);
+}
+
+.owl-container.armed:active {
+    transform: scale(0.98);
+}
+
+.owl-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+}
+
+.owl-glow {
+    position: absolute;
+    inset: -8px;
+    background: radial-gradient(circle, rgba(255, 215, 100, 0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: owl-pulse 2s ease-in-out infinite;
+    z-index: 0;
+}
+
+@keyframes owl-pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+/* Riddle Modal Overlay */
+.riddle-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Riddle Modal */
+.riddle-modal {
+    background: linear-gradient(145deg, #2a1f4e, #1a1333);
+    border: 2px solid #8b6914;
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 340px;
+    width: 90%;
+    box-shadow:
+        0 0 30px rgba(139, 105, 20, 0.3),
+        inset 0 0 20px rgba(255, 215, 100, 0.05);
+    animation: modalSlideIn 0.4s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Riddle Header */
+.riddle-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(139, 105, 20, 0.3);
+}
+
+.riddle-owl-icon {
+    font-size: 28px;
+}
+
+.riddle-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffd700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+.riddle-timer {
+    font-size: 14px;
+    color: #a0a0a0;
+    font-family: monospace;
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+}
+
+.riddle-timer.warning {
+    color: #ff6b6b;
+    animation: timerPulse 0.5s ease infinite;
+}
+
+@keyframes timerPulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Riddle Prompt */
+.riddle-prompt {
+    font-size: 18px;
+    color: #e8e0f0;
+    text-align: center;
+    padding: 16px;
+    margin-bottom: 20px;
+    font-style: italic;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    line-height: 1.5;
+}
+
+/* Riddle Answers */
+.riddle-answers {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.riddle-answer {
+    background: linear-gradient(145deg, #3a2f5e, #2a1f4e);
+    border: 1px solid rgba(139, 105, 20, 0.3);
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: #d0c8e0;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.riddle-answer:hover:not(:disabled) {
+    background: linear-gradient(145deg, #4a3f6e, #3a2f5e);
+    border-color: rgba(139, 105, 20, 0.6);
+    transform: translateX(4px);
+}
+
+.riddle-answer:active:not(:disabled) {
+    transform: translateX(2px);
+}
+
+.riddle-answer.selected {
+    border-color: #8b6914;
+    background: linear-gradient(145deg, #4a3f6e, #3a2f5e);
+}
+
+.riddle-answer.correct {
+    background: linear-gradient(145deg, #2a5e3a, #1a4e2a);
+    border-color: #4caf50;
+    color: #a8ffb8;
+}
+
+.riddle-answer.wrong {
+    background: linear-gradient(145deg, #5e2a3a, #4e1a2a);
+    border-color: #e74c3c;
+    color: #ffb8b8;
+}
+
+.riddle-answer:disabled {
+    cursor: default;
+}
+
+/* Riddle Result */
+.riddle-result {
+    margin-top: 20px;
+    padding: 16px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    animation: resultSlideIn 0.3s ease;
+}
+
+@keyframes resultSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.riddle-result.success {
+    background: linear-gradient(145deg, #2a5e3a, #1a4e2a);
+    color: #a8ffb8;
+    border: 1px solid #4caf50;
+}
+
+.riddle-result.fail {
+    background: linear-gradient(145deg, #3a3a5e, #2a2a4e);
+    color: #c8c8e0;
+    border: 1px solid rgba(139, 105, 20, 0.3);
+}

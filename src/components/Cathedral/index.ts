@@ -1,0 +1,1 @@
+export { Cathedral } from './Cathedral';

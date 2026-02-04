@@ -1,0 +1,56 @@
+.cathedral {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Realm content area - fills space above nav, no scroll on Home */
+.realm-content {
+    position: absolute;
+    inset: 0;
+    bottom: 60px;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Allow scroll only for non-Home realms */
+.realm-content.scrollable {
+    overflow-y: auto;
+    padding: 1rem;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.realm-content.scrollable::-webkit-scrollbar {
+    display: none;
+}
+
+.realm-loader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.loader-spinner {
+    font-size: 2rem;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

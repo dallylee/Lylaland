@@ -1,0 +1,16 @@
+﻿memory.md
+src/components/BackgroundLayers/ArchWindow.css
+src/components/BackgroundLayers/FrameOverlay.css
+src/components/BottomNav/BottomNav.css
+src/components/Cathedral/Cathedral.css
+src/components/MediaCard.tsx
+src/context/MagicContext.tsx
+src/index.css
+src/realms/CraftsRealm.tsx
+src/realms/DiaryRealm.tsx
+src/realms/GamesRealm.tsx
+src/realms/MediaRealm.css
+src/realms/MediaRealm.tsx
+src/realms/RealmStyles.css
+src/services/db.ts
+src/slots/trophySlots.ts

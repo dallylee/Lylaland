@@ -1,0 +1,54 @@
+.hotspot {
+    position: absolute;
+    cursor: pointer;
+    z-index: 100;
+    pointer-events: auto;
+    transition: box-shadow 0.3s ease;
+    border-radius: 50%;
+    /* Most hotspots are roughly circular areas */
+}
+
+/* Debug view - visible in dev mode */
+
+.hotspot.holding {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    background: rgba(255, 215, 0, 0.1);
+    animation: hotspot-pulse 1s infinite ease-in-out;
+}
+
+.hotspot.stirring {
+    box-shadow: 0 0 30px rgba(138, 43, 226, 0.8);
+    background: rgba(138, 43, 226, 0.1);
+}
+
+.hotspot-debug {
+    position: absolute;
+    top: -25px;
+    left: 0;
+    white-space: nowrap;
+    background: rgba(0, 0, 0, 0.8);
+    color: #ffd700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-family: monospace;
+    pointer-events: none;
+    z-index: 101;
+}
+
+@keyframes hotspot-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

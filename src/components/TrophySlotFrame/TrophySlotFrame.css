@@ -1,0 +1,129 @@
+.trophy-slot-frame {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Slot container - positioned by anchor */
+.slot {
+    display: flex;
+    align-items: flex-end;
+    /* Items sit at bottom of hit area */
+    justify-content: center;
+    pointer-events: auto;
+}
+
+/* Debug mode - show hit areas (not placement truth) */
+.slot-debug {
+    background: rgba(197, 214, 163, 0.6);
+    /* Khaki/sage, semi-transparent */
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    /* White outline */
+    border-radius: 4px;
+}
+
+.slot-debug::after {
+    content: attr(data-slot-id);
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.45rem;
+    color: rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+/* Item image - fills hit area, sits at bottom */
+.slot-item {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+}
+
+/* Filled slot subtle glow (production) */
+.slot-filled:not(.slot-debug) {
+    filter: drop-shadow(0 0 4px rgba(147, 51, 234, 0.3));
+}
+
+/* Prophecy Mirror Glow */
+.slot.mirror-prophecy {
+    cursor: pointer;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
+    animation: prophecy-glow 2s infinite alternate ease-in-out;
+}
+
+@keyframes prophecy-glow {
+    from { filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.5)); }
+    to { filter: drop-shadow(0 0 12px rgba(255, 215, 0, 1)); }
+}
+
+/* Debug: Anchor crosshair marker at bottom-center of slot */
+.anchor-marker {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 12px;
+    height: 12px;
+    border: 2px solid #00ff00;
+    border-radius: 50%;
+    background: rgba(0, 255, 0, 0.4);
+    pointer-events: none;
+}
+
+.anchor-marker::before,
+.anchor-marker::after {
+    content: '';
+    position: absolute;
+    background: #00ff00;
+}
+
+.anchor-marker::before {
+    /* Vertical line */
+    width: 2px;
+    height: 20px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.anchor-marker::after {
+    /* Horizontal line */
+    width: 20px;
+    height: 2px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Calibration mode */
+[data-calibrating="true"] .slot {
+    cursor: grab;
+}
+
+[data-calibrating="true"] .slot-dragging {
+    cursor: grabbing;
+    z-index: 1000;
+}
+
+/* Coordinate display in calibration mode */
+.anchor-coords {
+    position: absolute;
+    top: -22px;
+    /* Moved to top instead of bottom */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #00ff00;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 2px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+    pointer-events: none;
+    font-family: 'Courier New', monospace;
+    border: 1px solid rgba(0, 255, 0, 0.5);
+}

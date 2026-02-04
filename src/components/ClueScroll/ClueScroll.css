@@ -1,0 +1,216 @@
+/* ClueScroll Component Styles */
+
+.clue-scroll-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 900;
+    backdrop-filter: blur(3px);
+    animation: clueOverlayIn 0.4s ease;
+}
+
+.clue-scroll-overlay.closing {
+    animation: clueOverlayOut 0.4s ease forwards;
+}
+
+@keyframes clueOverlayIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes clueOverlayOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* Scroll Container */
+.clue-scroll {
+    background: linear-gradient(180deg, #f5e6c8 0%, #e8d4a8 50%, #d4c090 100%);
+    border-radius: 8px;
+    padding: 24px 20px;
+    max-width: 320px;
+    width: 85%;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.4),
+        inset 0 -2px 4px rgba(139, 105, 20, 0.2);
+    position: relative;
+    animation: scrollSlideIn 0.5s ease;
+}
+
+.clue-scroll.closing {
+    animation: scrollSlideOut 0.4s ease forwards;
+}
+
+@keyframes scrollSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes scrollSlideOut {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+}
+
+/* Scroll Decorations */
+.scroll-decoration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 0;
+}
+
+.scroll-decoration.top {
+    margin-bottom: 12px;
+}
+
+.scroll-decoration.bottom {
+    margin-top: 16px;
+}
+
+.scroll-ornament {
+    color: #8b6914;
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+.scroll-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #8b6914 50%, transparent);
+    opacity: 0.4;
+}
+
+/* Scroll Content */
+.scroll-content {
+    text-align: center;
+}
+
+.scroll-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.scroll-icon {
+    font-size: 24px;
+}
+
+.scroll-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #5a4620;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Clue Message */
+.scroll-message {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.clue-text {
+    font-size: 16px;
+    color: #3a2e1a;
+    line-height: 1.6;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Hint */
+.scroll-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    opacity: 0.7;
+    animation: hintPulse 2s ease infinite;
+}
+
+@keyframes hintPulse {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.hint-icon {
+    font-size: 14px;
+}
+
+.hint-text {
+    font-size: 13px;
+    color: #5a4620;
+    font-style: italic;
+}
+
+/* Acknowledge Button */
+.scroll-button {
+    display: block;
+    width: 100%;
+    padding: 14px 20px;
+    margin-top: 16px;
+    background: linear-gradient(145deg, #8b6914, #6a4f10);
+    border: none;
+    border-radius: 8px;
+    color: #f5e6c8;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow:
+        0 4px 12px rgba(139, 105, 20, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.scroll-button:hover {
+    background: linear-gradient(145deg, #9a7816, #785812);
+    transform: translateY(-2px);
+    box-shadow:
+        0 6px 16px rgba(139, 105, 20, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.scroll-button:active {
+    transform: translateY(0);
+    box-shadow:
+        0 2px 8px rgba(139, 105, 20, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}

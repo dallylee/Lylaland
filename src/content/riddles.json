@@ -1,0 +1,50 @@
+[
+  {
+    "id": "r_0001",
+    "prompt": "I have a tail but no body, I shine at night but give no light. What am I?",
+    "answers": [
+      "A firefly",
+      "A shooting star",
+      "A comet",
+      "A lightning bug"
+    ],
+    "correctIndex": 2,
+    "difficulty": 1,
+    "tags": [
+      "easy",
+      "nature"
+    ]
+  },
+  {
+    "id": "r_0002",
+    "prompt": "I can fly without wings. I can cry without eyes. What am I?",
+    "answers": [
+      "A ghost",
+      "A cloud",
+      "A bird",
+      "The wind"
+    ],
+    "correctIndex": 1,
+    "difficulty": 1,
+    "tags": [
+      "easy",
+      "nature"
+    ]
+  },
+  {
+    "id": "r_0003",
+    "prompt": "The more you take, the more you leave behind. What am I?",
+    "answers": [
+      "Footsteps",
+      "Money",
+      "Time",
+      "Memories"
+    ],
+    "correctIndex": 0,
+    "difficulty": 2,
+    "tags": [
+      "medium",
+      "thinking"
+    ]
+  }
+]

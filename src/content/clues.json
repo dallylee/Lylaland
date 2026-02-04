@@ -1,0 +1,217 @@
+[
+  {
+    "id": "disc_clueRelic",
+    "text": "A relic is hiding in plain sight, greet the arch window with one gentle tap.",
+    "realm": "home",
+    "difficulty": 1,
+    "cooldownDays": 0,
+    "timeWindow": null,
+    "targetHotspotId": "home_arch_window",
+    "steps": [
+      {
+        "type": "hotspot",
+        "realm": "home",
+        "hotspotId": "home_arch_window",
+        "interaction": {
+          "kind": "tap"
+        }
+      }
+    ]
+  },
+  {
+    "id": "disc_home_moonTriple",
+    "text": "Wake the night with a triple knock on the moon's silver eye.",
+    "realm": "home",
+    "difficulty": 1,
+    "cooldownDays": 0,
+    "timeWindow": null,
+    "targetHotspotId": "home_moon",
+    "steps": [
+      {
+        "type": "hotspot",
+        "realm": "home",
+        "hotspotId": "home_moon",
+        "interaction": {
+          "kind": "multiTap",
+          "taps": 3,
+          "maxIntervalMs": 1200
+        }
+      }
+    ]
+  },
+  {
+    "id": "disc_leftLedge_hold",
+    "text": "The left tower keeps tiny secrets, rest your finger on its ledge until it warms to you.",
+    "realm": "home",
+    "difficulty": 1,
+    "cooldownDays": 0,
+    "timeWindow": null,
+    "targetHotspotId": "home_left_tower_ledge",
+    "steps": [
+      {
+        "type": "hotspot",
+        "realm": "home",
+        "hotspotId": "home_left_tower_ledge",
+        "interaction": {
+          "kind": "longPress",
+          "holdMs": 1500
+        }
+      }
+    ]
+  },
+  {
+    "id": "disc_media_redBook",
+    "text": "In the Media realm, the red book hums softly, tap its cover and carry that feeling back Home.",
+    "realm": "media",
+    "difficulty": 2,
+    "cooldownDays": 0,
+    "timeWindow": null,
+    "targetHotspotId": "media_red_book",
+    "steps": [
+      {
+        "type": "hotspot",
+        "realm": "media",
+        "hotspotId": "media_red_book",
+        "interaction": {
+          "kind": "tap"
+        }
+      },
+      {
+        "type": "realmOpened",
+        "realm": "home"
+      },
+      {
+        "type": "hotspot",
+        "realm": "home",
+        "hotspotId": "home_arch_window",
+        "interaction": {
+          "kind": "tap"
+        }
+      }
+    ]
+  },
+  {
+    "id": "disc_diary_waxSeal",
+    "text": "The wax seal is a lock, press and hold it for two slow heartbeats.",
+    "realm": "diary",
+    "difficulty": 2,
+    "cooldownDays": 0,
+    "timeWindow": null,
+    "targetHotspotId": "diary_corner_seal",
+    "steps": [
+      {
+        "type": "hotspot",
+        "realm": "diary",
+        "hotspotId": "diary_corner_seal",
+        "interaction": {
+          "kind": "longPress",
+          "holdMs": 2000
+        }
+      }
+    ]
+  },
+  {
+    "id": "disc_rightLedge_noonTap",
+    "text": "When the day stands tallest, the right tower listens, tap its ledge at noon.",
+    "realm": "home",
+    "difficulty": 3,
+    "cooldownDays": 7,
+    "timeWindow": {
+      "type": "noon",
+      "fallbackHours": 24
+    },
+    "targetHotspotId": "home_right_tower_ledge",
+    "steps": [
+      {
+        "type": "hotspot",
+        "realm": "home",
+        "hotspotId": "home_right_tower_ledge",
+        "interaction": {
+          "kind": "tap"
+        }
+      }
+    ]
+  },
+  {
+    "id": "disc_multiStep_moonDiaryArch",
+    "text": "A real secret has steps, tap the moon, open your Diary, then return Home and touch the arch.",
+    "realm": "home",
+    "difficulty": 3,
+    "cooldownDays": 7,
+    "timeWindow": null,
+    "targetHotspotId": "home_arch_window",
+    "steps": [
+      {
+        "type": "hotspot",
+        "realm": "home",
+        "hotspotId": "home_moon",
+        "interaction": {
+          "kind": "tap"
+        }
+      },
+      {
+        "type": "realmOpened",
+        "realm": "diary"
+      },
+      {
+        "type": "realmOpened",
+        "realm": "home"
+      },
+      {
+        "type": "hotspot",
+        "realm": "home",
+        "hotspotId": "home_arch_window",
+        "interaction": {
+          "kind": "tap"
+        }
+      }
+    ]
+  },
+  {
+    "id": "disc_games_targetTriple",
+    "text": "In Games, the target likes rhythm, give the bullseye three quick taps, neat and brave.",
+    "realm": "games",
+    "difficulty": 2,
+    "cooldownDays": 0,
+    "timeWindow": null,
+    "targetHotspotId": "games_archery_target",
+    "steps": [
+      {
+        "type": "hotspot",
+        "realm": "games",
+        "hotspotId": "games_archery_target",
+        "interaction": {
+          "kind": "multiTap",
+          "taps": 3,
+          "maxIntervalMs": 1200
+        }
+      }
+    ]
+  },
+  {
+    "id": "disc_crafts_cauldronStir",
+    "text": "In Crafts, the cauldron is not just for looks, press, hold, then stir in a small circle to wake the brew.",
+    "realm": "crafts",
+    "difficulty": 2,
+    "cooldownDays": 0,
+    "timeWindow": {
+      "type": "evening",
+      "fallbackHours": 24
+    },
+    "targetHotspotId": "crafts_cauldron",
+    "steps": [
+      {
+        "type": "hotspot",
+        "realm": "crafts",
+        "hotspotId": "crafts_cauldron",
+        "interaction": {
+          "kind": "holdThenStir",
+          "holdMs": 900,
+          "stirTurns": 1,
+          "stirRadiusPx": 24,
+          "stirMaxDurationMs": 2500
+        }
+      }
+    ]
+  }
+]

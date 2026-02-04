@@ -1,0 +1,72 @@
+[
+  {
+    "id": "ia:goodytwoshoes00newyiala",
+    "title": "Goody Two-Shoes",
+    "identifier": "goodytwoshoes00newyiala",
+    "coverImage": "https://dn721606.ca.archive.org/0/items/goodytwoshoes00newyiala/goodytwoshoes00newyiala_cover_image.jpg",
+    "type": "book"
+  },
+  {
+    "id": "ia:abroadcranethoma00craniala",
+    "title": "Abroad",
+    "identifier": "abroadcranethoma00craniala",
+    "coverImage": "https://ia801607.us.archive.org/0/items/abroadcranethoma00craniala/abroadcranethoma00craniala_cover_image.jpg",
+    "type": "book"
+  },
+  {
+    "id": "ia:wonderfulwizardo00baumiala",
+    "title": "The wonderful wizard of Oz",
+    "identifier": "wonderfulwizardo00baumiala",
+    "coverImage": "https://ia601209.us.archive.org/11/items/wonderfulwizardo00baumiala/wonderfulwizardo00baumiala_cover_image.jpg",
+    "type": "book"
+  },
+  {
+    "id": "ia:adventuresoftoms00twaiiala",
+    "title": "The adventures of Tom Sawyer",
+    "identifier": "adventuresoftoms00twaiiala",
+    "coverImage": "https://ia800202.us.archive.org/10/items/adventuresoftoms00twaiiala/adventuresoftoms00twaiiala_cover_image.jpg",
+    "type": "book"
+  },
+  {
+    "id": "ia:oldfrenchfairyta00sgrich",
+    "title": "Old French fairy tales",
+    "identifier": "oldfrenchfairyta00sgrich",
+    "coverImage": "https://ia601201.us.archive.org/27/items/oldfrenchfairyta00sgrich/oldfrenchfairyta00sgrich_cover_image.jpg",
+    "type": "book"
+  },
+  {
+    "id": "ia:cinderella00dalziala",
+    "title": "Cinderella",
+    "identifier": "cinderella00dalziala",
+    "coverImage": "https://ia800309.us.archive.org/34/items/cinderella00dalziala/cinderella00dalziala_cover_image.jpg",
+    "type": "book"
+  },
+  {
+    "id": "ia:__firs",
+    "title": "My Very First Little German Book",
+    "identifier": "__firs",
+    "coverImage": "",
+    "type": "book"
+  },
+  {
+    "id": "ia:kittenscatsbooko00grov",
+    "title": "Kittens and cats; a book of tales",
+    "identifier": "kittenscatsbooko00grov",
+    "coverImage": "https://ia801802.us.archive.org/26/items/kittenscatsbooko00grov/kittenscatsbooko00grov_cover_image.jpg",
+    "type": "book"
+  },
+  {
+    "id": "ia:adventureshuckle00twaiiala",
+    "title": "Adventures of Huckleberry Finn (Tom Sawyer's comrade)",
+    "identifier": "adventureshuckle00twaiiala",
+    "coverImage": "",
+    "type": "book"
+  },
+  {
+    "id": "ia:mcguffeyselecti00mcgu",
+    "title": "McGuffey's eclectic primer",
+    "identifier": "mcguffeyselecti00mcgu",
+    "coverImage": "",
+    "type": "book"
+  }
+]

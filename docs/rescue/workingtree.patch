@@ -1,0 +1,115 @@
+﻿diff --git a/src/components/BottomNav/BottomNav.css b/src/components/BottomNav/BottomNav.css
+index 8674bc1..eca30bb 100644
+--- a/src/components/BottomNav/BottomNav.css
++++ b/src/components/BottomNav/BottomNav.css
+@@ -54,4 +54,32 @@
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.02em;
++}
++
++/* Desktop Pill Navigation */
++@media (min-width: 768px) {
++    .bottom-nav {
++        bottom: 20px;
++        left: 50%;
++        right: auto;
++        transform: translateX(-50%);
++        width: auto;
++        min-width: 400px;
++        background: rgba(15, 10, 30, 0.8) !important;
++        backdrop-filter: blur(20px);
++        -webkit-backdrop-filter: blur(20px);
++        border: 1px solid rgba(255, 255, 255, 0.15);
++        border-radius: 999px;
++        padding: 8px 20px;
++        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(147, 51, 234, 0.2);
++    }
++
++    .nav-tabs {
++        gap: 15px;
++    }
++
++    .nav-tab {
++        padding: 10px 15px;
++        min-width: auto;
++    }
+ }
+\ No newline at end of file
+diff --git a/src/index.css b/src/index.css
+index 165d870..5836d37 100644
+--- a/src/index.css
++++ b/src/index.css
+@@ -12,12 +12,12 @@
+   --sparkle-gold: #f59e0b;
+   --sparkle-deep: #1e1b4b;
+   --sparkle-night: #0f0a1e;
+-  
++
+   /* Gradients */
+   --gradient-magic: linear-gradient(135deg, var(--sparkle-purple) 0%, var(--sparkle-pink) 50%, var(--sparkle-blue) 100%);
+   --gradient-night: linear-gradient(180deg, var(--sparkle-night) 0%, var(--sparkle-deep) 100%);
+   --gradient-glow: radial-gradient(circle, rgba(147, 51, 234, 0.3) 0%, transparent 70%);
+-  
++
+   /* Glass effect */
+   --glass-bg: rgba(255, 255, 255, 0.08);
+   --glass-border: rgba(255, 255, 255, 0.15);
+@@ -30,7 +30,9 @@
+   padding: 0;
+ }
+ 
+-html, body, #root {
++html,
++body,
++#root {
+   height: 100%;
+   width: 100%;
+   overflow: hidden;
+@@ -53,18 +55,18 @@ body {
+     border: 1px solid var(--glass-border);
+     box-shadow: var(--glass-shadow);
+   }
+-  
++
+   .glass-light {
+     background: rgba(255, 255, 255, 0.12);
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+     border: 1px solid rgba(255, 255, 255, 0.2);
+   }
+-  
++
+   .text-glow {
+     text-shadow: 0 0 20px var(--sparkle-purple), 0 0 40px var(--sparkle-pink);
+   }
+-  
++
+   .gradient-text {
+     background: var(--gradient-magic);
+     -webkit-background-clip: text;
+@@ -85,8 +87,9 @@ body {
+ 
+ @media (min-width: 768px) {
+   .sparkle-container {
++    max-width: 800px;
+     border-left: 1px solid var(--glass-border);
+     border-right: 1px solid var(--glass-border);
+     box-shadow: 0 0 60px rgba(147, 51, 234, 0.2);
+   }
+-}
++}
+\ No newline at end of file
+diff --git a/src/realms/MediaRealm.tsx b/src/realms/MediaRealm.tsx
+index 004cd65..98e7754 100644
+--- a/src/realms/MediaRealm.tsx
++++ b/src/realms/MediaRealm.tsx
+@@ -129,7 +129,7 @@ function MediaRealm() {
+                 )}
+             </nav>
+ 
+-            <div className="realm-content">
++            <div className="realm-scroll-section">
+                 {activeTab === 'featured' && (
+                     <div className="featured-section">
+                         <h2 className="section-title">Ô£¿ Recommended for You</h2>

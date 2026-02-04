@@ -1,0 +1,261 @@
+/* Home Realm - Stage-Based Scene Styles */
+
+.home-realm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Dev controls toolbar */
+.dev-controls {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 9999;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Dev buttons */
+.dev-btn {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.dev-btn:hover {
+    background: rgba(0, 0, 0, 0.85);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.dev-btn.active {
+    background: #9333ea;
+    border-color: #a855f7;
+}
+
+.dev-btn.export-btn {
+    background: #059669;
+    border-color: #10b981;
+}
+
+.dev-btn.export-btn:hover {
+    background: #047857;
+    border-color: #059669;
+}
+
+/* StageHost: fills available content area */
+.stage-host {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Stage: fixed logical canvas, globally transformed */
+.stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    /* Width/height set inline (390x844) */
+    transform-origin: 0 0;
+    /* Transform set inline via JS */
+}
+
+/* Debug background to show stage bounds */
+.stage[data-debug="true"] {
+    background: #4dd9e688;
+    /* Transparent cyan */
+}
+
+/* All layers inside stage share same coordinate space */
+.stage-layer {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Stage images: fill the fixed stage dimensions, NO object-fit cover */
+.stage-img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    /* Not cover - Stage transform handles scaling */
+    pointer-events: none;
+}
+
+/* Background stars layer */
+.layer-bg-stars {
+    z-index: 0;
+}
+
+/* Frame overlay BACK (behind items) */
+.layer-overlay-back {
+    z-index: 1;
+}
+
+/* Frame overlay FRONT (occlusion - in front of items) */
+.layer-overlay-front {
+    z-index: 20;
+}
+
+/* Debug alignment guides layer */
+.layer-debug-guides {
+    z-index: 30;
+}
+
+/* Cabinet outline layer - debug only */
+.stage[data-debug="true"] .layer-cabinet-outline {
+    z-index: 35;
+    top: 320px;
+    left: 47px;
+    width: 296px;
+    height: 350px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    display: block;
+}
+
+.layer-cabinet-outline {
+    display: none;
+}
+
+/* Debug guide line - horizontal shelf lip indicator */
+.debug-guide-line {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 0, 255, 0.8) 10%,
+            rgba(255, 0, 255, 0.8) 90%,
+            transparent 100%);
+    pointer-events: none;
+}
+
+/* Draggable shelf lips in calibration mode */
+.debug-guide-line.draggable {
+    pointer-events: auto;
+    cursor: ns-resize;
+    height: 8px;
+    /* Bigger hit area */
+    margin-top: -3px;
+    /* Center on original position */
+}
+
+.debug-guide-line.dragging {
+    background: linear-gradient(90deg,
+            transparent 0%,
+            rgba(0, 255, 0, 0.9) 10%,
+            rgba(0, 255, 0, 0.9) 90%,
+            transparent 100%);
+    height: 3px;
+    z-index: 1000;
+}
+
+.debug-guide-line::after {
+    content: attr(data-label);
+    position: absolute;
+    right: 8px;
+    top: -16px;
+    font-size: 10px;
+    color: #ff00ff;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+/* Debug crosshair marker at center */
+.debug-crosshair {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid #00ff00;
+    border-radius: 50%;
+    background: rgba(0, 255, 0, 0.2);
+    pointer-events: none;
+}
+
+.debug-crosshair::before,
+.debug-crosshair::after {
+    content: '';
+    position: absolute;
+    background: #00ff00;
+}
+
+.debug-crosshair::before {
+    /* Vertical line */
+    width: 2px;
+    height: 24px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.debug-crosshair::after {
+    /* Horizontal line */
+    width: 24px;
+    height: 2px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Dev only debug toggle button */
+.dev-debug-toggle {
+    position: fixed;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.7);
+    color: #4dd9e6;
+    border: 1px solid #4dd9e6;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.dev-debug-toggle:hover {
+    background: rgba(0, 0, 0, 0.82);
+    box-shadow: 0 4px 15px rgba(0, 255, 255, 0.2);
+}
+
+/* Shelf line decorations (legacy, used by cabinet outline) */
+.shelf-line {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.shelf-line-1 {
+    top: 279px;
+}
+
+.shelf-line-2 {
+    top: 557px;
+}

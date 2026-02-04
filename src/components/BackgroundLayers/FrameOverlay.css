@@ -1,0 +1,94 @@
+.frame-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.vine {
+    position: absolute;
+    /* DISABLED: Replaced by frame_arch_overlay.png art */
+    opacity: 0;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(34, 139, 34, 0.2),
+            rgba(60, 179, 113, 0.3),
+            rgba(34, 139, 34, 0.2),
+            transparent);
+}
+
+.vine-top-left {
+    top: 0;
+    left: 0;
+    width: 120px;
+    height: 80px;
+    border-radius: 0 0 100% 0;
+    transform: rotate(-5deg);
+}
+
+.vine-top-right {
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: 80px;
+    border-radius: 0 0 0 100%;
+    transform: rotate(5deg);
+}
+
+.vine-left {
+    top: 20%;
+    left: 0;
+    width: 30px;
+    height: 200px;
+    border-radius: 0 50% 50% 0;
+}
+
+.vine-right {
+    top: 30%;
+    right: 0;
+    width: 30px;
+    height: 180px;
+    border-radius: 50% 0 0 50%;
+}
+
+.sparkle-accent {
+    position: absolute;
+    font-size: 1rem;
+    animation: sparkle-pulse 3s ease-in-out infinite;
+    opacity: 0.7;
+}
+
+.accent-1 {
+    top: 8%;
+    left: 15%;
+    animation-delay: 0s;
+}
+
+.accent-2 {
+    top: 12%;
+    right: 12%;
+    animation-delay: 1s;
+}
+
+.accent-3 {
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-delay: 2s;
+    font-size: 0.8rem;
+}
+
+@keyframes sparkle-pulse {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(0.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}

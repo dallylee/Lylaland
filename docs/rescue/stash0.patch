@@ -1,0 +1,1635 @@
+﻿diff --git a/memory.md b/memory.md
+index 51b1c97..9bd39ac 100644
+--- a/memory.md
++++ b/memory.md
+@@ -1,38 +1,54 @@
+ # Project Memory: [Sparkle World]
+ 
+-**Last Updated:** 2026-02-03 12:45 AM
++**Last Updated:** 2026-02-03 7:44 PM
+ 
+ ## ­ƒÄ» Current High-Level Objective
+ 
+-- Transition from Media Realm (M4) to Milestone M5 (Social Discovery & Expansion).
++- M4 Media UI polish complete. Desktop layout finalized. Ready for M5 planning.
+ 
+ ## Ô£à Completed (Do Not Repeat)
+ 
++- **Desktop Layout Polish (2026-02-03 PM)**:
++  - **Width Constraint Scoping**: Scoped `.sparkle-container` max-width (430px) to Home-only via `body.home-locked` selector. Non-Home realms now use full responsive width.
++  - **Centered Page Container**: Added max-width (1200px) + side padding (24px) for non-Home realms.
++  - **Ribbon Nav**: Fixed BottomNav to be centered pill (max-width 640px) on desktop for non-Home.
++  - **Home-Only Overlays**: Gated `FrameOverlay` and `ArchWindow` to render only on Home (`display: none` for non-Home).
++  - **Milestone Tokens**: `DESKTOP_WIDTH_FIXED_NON_HOME`, `DESKTOP_POLISH_NON_HOME_COMPLETE`.
++
+ - **M4 Media Realm & Rewards**:
+   - **Seed Ingestion**: Processed `books_embed.csv` and `kids_youtube_embed.csv` into JSON seeds (10 books, 31 videos).
+   - **Dexie V2 Persistence**: Implemented `mediaCompletions` and `mediaSearchCache` tables in `db.ts`.
+-  - **Archive.org Integration**: Developed `src/services/archiveSearch.ts` for client-side search across public domain books/audiobooks.
+-  - **Media UI Components**: Implemented `MediaCard` (universal embeds) and `MediaRealm` (tabbed library, Archive.org search).
+-  - **Progression Logic**: Hooked `media_done` events into `ProgressionEngine` to award Gold Stars (respecting daily caps).
++  - **Archive.org Integration**: Developed `src/services/archiveSearch.ts` for client-side search.
++  - **Media UI Components**: Implemented `MediaCard`, `MediaShelf`, `VideoCard`, `BookFlipCard`, and `MediaRealm` (tabbed library).
++  - **Progression Logic**: Hooked `media_done` events into `ProgressionEngine` to award Gold Stars.
++
++- **M4 UI Polish (Earlier)**:
++  - **Scroll-Safe Containers**: Generalized scroll pattern across all non-Home realms.
++  - **Media Layout Fix**: Fixed card bleeding with `contain: layout style`, sticky menu tabs.
++  - **Home-Only Lock Architecture**: Isolated viewport frame lock to Home realm only using body class toggle.
++
+ - **M3 Features**: Prophecy Engine, Dragon Egg Hatching, and Daily Cap system are stable.
+-- **Infrastructure**: Switched from `styled-jsx` to external CSS in `MediaRealm.css` to fix production build issues.
++- **Infrastructure**: Switched from `styled-jsx` to external CSS. Trophy slot positions updated.
+ 
+ ## ­ƒÜº Current State & Work-in-Progress
+ 
+-- **Active File(s):** `src/realms/MediaRealm.tsx`, `src/engine/ProgressionEngine.ts`.
+-- **Current Logic:** The system is **M4 Stable**. All 29 unit tests pass. Production build is verified.
+-- **Current Bugs/Issues:** No known critical issues. `styled-jsx` dependency was removed to resolve build conflicts.
++- **Active File(s):** `src/index.css`, `src/components/BottomNav/BottomNav.css`, `src/components/BackgroundLayers/*.css`.
++- **Current Logic:** The system is **M4 Stable**. Production build verified. Browser tests passed.
++- **Current Bugs/Issues:** None critical. Long-running test processes may need termination.
+ 
+ ## ­ƒøá Technical Context
+ 
+-- **Tech Stack:** React (Vite/Craco), TypeScript, Dexie/IndexedDB, Archive.org API.
+-- **Key Tokens:** `M4_MEDIA_REALM_COMPLETE`, `M4_ARCHIVE_SEARCH_STABLE`.
++- **Tech Stack:** React (Craco), TypeScript, Dexie/IndexedDB, Archive.org API, Tailwind CSS.
++- **Key Tokens:** `DESKTOP_WIDTH_FIXED_NON_HOME`, `DESKTOP_POLISH_NON_HOME_COMPLETE`, `M4_MEDIA_LAYOUT_FIXED`.
+ - **Architectural Decisions:**
+-  - Archive.org search results are cached in Dexie to avoid redundant API calls.
+-  - YouTube embeds use `nocookie` domain for child safety and privacy.
++  - Body class `home-locked` toggles CSS frame locks: Home is phone-sized (430px), other realms use full responsive width.
++  - Non-Home realms: max-width 1200px, centered, side padding 24px.
++  - BottomNav: centered ribbon (640px max) on desktop for non-Home.
++  - `FrameOverlay` and `ArchWindow` hidden on non-Home realms.
+ 
+ ## ­ƒÜÇ Immediate Next Steps
+ 
+-1. [ ] **M5 Planning**: Define social discovery features and "Parent Dashboard" requirements.
+-2. [ ] **UI Polish**: Improve the loading state visual for Archive.org search.
+-3. [ ] **Clean Up**: Verify and remove any temporary seed files or unused scripts.
++1. [x] **Desktop Width Fix**: Scoped phone frame to Home only.
++2. [x] **Desktop Polish**: Centered container, ribbon nav, Home-only overlays.
++3. [ ] **Git Commit**: Commit and push today's changes with milestone tokens.
++4. [ ] **M5 Planning**: Define social discovery features and "Parent Dashboard" requirements.
+diff --git a/src/components/BackgroundLayers/ArchWindow.css b/src/components/BackgroundLayers/ArchWindow.css
+index 4b8add9..c15f428 100644
+--- a/src/components/BackgroundLayers/ArchWindow.css
++++ b/src/components/BackgroundLayers/ArchWindow.css
+@@ -192,4 +192,9 @@
+         opacity: 1;
+         transform: translateX(-50%) scale(1.1);
+     }
++}
++
++/* Only show arch window on Home realm */
++body:not(.home-locked) .arch-window-container {
++    display: none;
+ }
+\ No newline at end of file
+diff --git a/src/components/BackgroundLayers/FrameOverlay.css b/src/components/BackgroundLayers/FrameOverlay.css
+index 316fe05..27a45ca 100644
+--- a/src/components/BackgroundLayers/FrameOverlay.css
++++ b/src/components/BackgroundLayers/FrameOverlay.css
+@@ -91,4 +91,9 @@
+         opacity: 1;
+         transform: scale(1.1);
+     }
++}
++
++/* Only show frame overlay on Home realm */
++body:not(.home-locked) .frame-overlay {
++    display: none;
+ }
+\ No newline at end of file
+diff --git a/src/components/BottomNav/BottomNav.css b/src/components/BottomNav/BottomNav.css
+index 8674bc1..3deeb7c 100644
+--- a/src/components/BottomNav/BottomNav.css
++++ b/src/components/BottomNav/BottomNav.css
+@@ -54,4 +54,12 @@
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.02em;
++}
++
++/* Centered ribbon for non-Home on desktop */
++body:not(.home-locked) .bottom-nav {
++    width: min(640px, calc(100% - 32px));
++    left: 50%;
++    right: auto;
++    transform: translateX(-50%);
+ }
+\ No newline at end of file
+diff --git a/src/components/Cathedral/Cathedral.css b/src/components/Cathedral/Cathedral.css
+index 323dd2c..24b51f9 100644
+--- a/src/components/Cathedral/Cathedral.css
++++ b/src/components/Cathedral/Cathedral.css
+@@ -4,10 +4,14 @@
+     height: 100%;
+     display: flex;
+     flex-direction: column;
++}
++
++/* Lock Cathedral shell only when on Home realm */
++body.home-locked .cathedral {
+     overflow: hidden;
+ }
+ 
+-/* Realm content area - fills space above nav, no scroll on Home */
++/* Realm content area - fills space above nav */
+ .realm-content {
+     position: absolute;
+     inset: 0;
+@@ -15,9 +19,18 @@
+     z-index: 4;
+     display: flex;
+     flex-direction: column;
++}
++
++/* Lock realm-content only for Home */
++body.home-locked .realm-content {
+     overflow: hidden;
+ }
+ 
++/* Allow scroll for non-Home realms */
++body:not(.home-locked) .realm-content {
++    overflow-y: auto;
++}
++
+ /* Allow scroll only for non-Home realms */
+ .realm-content.scrollable {
+     overflow-y: auto;
+diff --git a/src/components/MediaCard.tsx b/src/components/MediaCard.tsx
+deleted file mode 100644
+index d144b92..0000000
+--- a/src/components/MediaCard.tsx
++++ /dev/null
+@@ -1,157 +0,0 @@
+-import React, { useState, useEffect } from 'react';
+-import { db } from '../services/db';
+-import { ProgressionEngine } from '../engine/ProgressionEngine';
+-import { getArchiveEmbedUrl } from '../services/archiveSearch';
+-
+-import '../realms/MediaRealm.css';
+-
+-interface MediaCardProps {
+-    id: string; // ia:<id> or yt:<id>
+-    title: string;
+-    type: 'book' | 'video';
+-    coverImage?: string;
+-    category?: string;
+-    about?: string;
+-    identifier?: string; // For books
+-    videoId?: string; // For YouTube
+-    isCompletedInitial?: boolean;
+-}
+-
+-const MediaCard: React.FC<MediaCardProps> = ({
+-    id,
+-    title,
+-    type,
+-    coverImage,
+-    category,
+-    about,
+-    identifier,
+-    videoId,
+-    isCompletedInitial = false
+-}) => {
+-    const [isCompleted, setIsCompleted] = useState(isCompletedInitial);
+-    const [showEmbed, setShowEmbed] = useState(false);
+-    const [isOnline, setIsOnline] = useState(navigator.onLine);
+-
+-    useEffect(() => {
+-        const handleStatus = () => setIsOnline(navigator.onLine);
+-        window.addEventListener('online', handleStatus);
+-        window.addEventListener('offline', handleStatus);
+-
+-        // Check local DB for completion status if not provided
+-        if (!isCompletedInitial) {
+-            db.mediaCompletions.get(id).then(status => {
+-                if (status) setIsCompleted(true);
+-            });
+-        }
+-
+-        return () => {
+-            window.removeEventListener('online', handleStatus);
+-            window.removeEventListener('offline', handleStatus);
+-        };
+-    }, [id, isCompletedInitial]);
+-
+-    const handleMarkCompleted = async () => {
+-        if (isCompleted) return;
+-
+-        try {
+-            // Persist completion
+-            await db.mediaCompletions.put({
+-                mediaId: id,
+-                completedAt: Date.now()
+-            });
+-
+-            // Route reward through ProgressionEngine
+-            ProgressionEngine.processEvent({
+-                type: 'media_done',
+-                payload: { clueId: id } // Using clueId as generic ID for payload
+-            });
+-
+-            setIsCompleted(true);
+-        } catch (err) {
+-            console.error('[MediaCard] Failed to save completion:', err);
+-        }
+-    };
+-
+-    const toggleEmbed = () => {
+-        if (!isOnline && !showEmbed) return;
+-        setShowEmbed(!showEmbed);
+-    };
+-
+-    const getEmbedUrl = () => {
+-        if (type === 'video' && videoId) {
+-            return `https://www.youtube-nocookie.com/embed/${videoId}`;
+-        }
+-        if (type === 'book' && identifier) {
+-            return getArchiveEmbedUrl(identifier);
+-        }
+-        return '';
+-    };
+-
+-    const embedUrl = getEmbedUrl();
+-
+-    return (
+-        <div className={`media-card ${isCompleted ? 'completed' : ''}`}>
+-            {category && <span className="category-tag">{category}</span>}
+-
+-            <div className="card-top" onClick={toggleEmbed}>
+-                {showEmbed && isOnline ? (
+-                    <div className="embed-container">
+-                        <iframe
+-                            src={embedUrl}
+-                            title={title}
+-                            frameBorder="0"
+-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+-                            allowFullScreen
+-                        ></iframe>
+-                        <button className="close-embed" onClick={(e) => { e.stopPropagation(); setShowEmbed(false); }}>
+-                            ├ù
+-                        </button>
+-                    </div>
+-                ) : (
+-                    <div className="cover-container">
+-                        {coverImage ? (
+-                            <img src={coverImage} alt={title} className="cover-image" />
+-                        ) : (
+-                            <div className="cover-placeholder">
+-                                {type === 'book' ? '­ƒôû' : '­ƒÄ¼'}
+-                            </div>
+-                        )}
+-                        <div className="play-overlay">
+-                            <span className="play-icon">{isOnline ? 'Ô£¿ View Ô£¿' : '­ƒô┤ Offline'}</span>
+-                        </div>
+-                    </div>
+-                )}
+-            </div>
+-
+-            <div className="card-info">
+-                <h3 className="media-title">{title}</h3>
+-                {about && <p className="media-description">{about}</p>}
+-
+-                <div className="card-actions">
+-                    {!isOnline && (
+-                        <span className="offline-notice">Offline - preview only</span>
+-                    )}
+-                    {type === 'video' && videoId && (
+-                        <a
+-                            href={`https://www.youtube.com/watch?v=${videoId}`}
+-                            target="_blank"
+-                            rel="noopener noreferrer"
+-                            className="external-link"
+-                        >
+-                            Open on YouTube Ôåù
+-                        </a>
+-                    )}
+-                    <button
+-                        className={`complete-btn ${isCompleted ? 'done' : ''}`}
+-                        onClick={handleMarkCompleted}
+-                        disabled={isCompleted}
+-                    >
+-                        {isCompleted ? 'Ô£à Finished' : (type === 'book' ? 'Mark as Read' : 'Mark as Watched')}
+-                    </button>
+-                </div>
+-            </div>
+-        </div>
+-    );
+-};
+-
+-export default MediaCard;
+diff --git a/src/context/MagicContext.tsx b/src/context/MagicContext.tsx
+index 1632787..ac38ed7 100644
+--- a/src/context/MagicContext.tsx
++++ b/src/context/MagicContext.tsx
+@@ -99,6 +99,18 @@ export function MagicProvider({ children }: MagicProviderProps) {
+         initEngine();
+     }, [activeRealmId]);
+ 
++    // Toggle body class for Home-only frame lock
++    useEffect(() => {
++        if (activeRealmId === 'home') {
++            document.body.classList.add('home-locked');
++        } else {
++            document.body.classList.remove('home-locked');
++        }
++        return () => {
++            document.body.classList.remove('home-locked');
++        };
++    }, [activeRealmId]);
++
+     const handleSetActiveRealmId = useCallback((id: string) => {
+         setActiveRealmId(id);
+         ProgressionEngine.processEvent({
+diff --git a/src/index.css b/src/index.css
+index 165d870..8368e2f 100644
+--- a/src/index.css
++++ b/src/index.css
+@@ -12,12 +12,12 @@
+   --sparkle-gold: #f59e0b;
+   --sparkle-deep: #1e1b4b;
+   --sparkle-night: #0f0a1e;
+-  
++
+   /* Gradients */
+   --gradient-magic: linear-gradient(135deg, var(--sparkle-purple) 0%, var(--sparkle-pink) 50%, var(--sparkle-blue) 100%);
+   --gradient-night: linear-gradient(180deg, var(--sparkle-night) 0%, var(--sparkle-deep) 100%);
+   --gradient-glow: radial-gradient(circle, rgba(147, 51, 234, 0.3) 0%, transparent 70%);
+-  
++
+   /* Glass effect */
+   --glass-bg: rgba(255, 255, 255, 0.08);
+   --glass-border: rgba(255, 255, 255, 0.15);
+@@ -30,9 +30,16 @@
+   padding: 0;
+ }
+ 
+-html, body, #root {
++html,
++body,
++#root {
+   height: 100%;
+   width: 100%;
++}
++
++/* Lock viewport only when on Home realm */
++body.home-locked,
++body.home-locked #root {
+   overflow: hidden;
+ }
+ 
+@@ -53,18 +60,18 @@ body {
+     border: 1px solid var(--glass-border);
+     box-shadow: var(--glass-shadow);
+   }
+-  
++
+   .glass-light {
+     background: rgba(255, 255, 255, 0.12);
+     backdrop-filter: blur(8px);
+     -webkit-backdrop-filter: blur(8px);
+     border: 1px solid rgba(255, 255, 255, 0.2);
+   }
+-  
++
+   .text-glow {
+     text-shadow: 0 0 20px var(--sparkle-purple), 0 0 40px var(--sparkle-pink);
+   }
+-  
++
+   .gradient-text {
+     background: var(--gradient-magic);
+     -webkit-background-clip: text;
+@@ -73,20 +80,47 @@ body {
+   }
+ }
+ 
+-/* Mobile-first container */
++/* Base container - full width for all realms */
+ .sparkle-container {
+   width: 100%;
+-  max-width: 430px;
+   height: 100%;
+-  margin: 0 auto;
+   position: relative;
++}
++
++/* Phone frame constraint ONLY for Home realm */
++body.home-locked .sparkle-container {
++  max-width: 430px;
++  margin: 0 auto;
++  overflow: hidden;
++}
++
++/* Non-Home realms: allow responsive width */
++body:not(.home-locked) .sparkle-container {
++  max-width: 100%;
+   overflow: hidden;
+ }
+ 
++/* Phone frame decoration only for Home on desktop */
+ @media (min-width: 768px) {
+-  .sparkle-container {
++  body.home-locked .sparkle-container {
+     border-left: 1px solid var(--glass-border);
+     border-right: 1px solid var(--glass-border);
+     box-shadow: 0 0 60px rgba(147, 51, 234, 0.2);
+   }
+ }
++
++/* Non-Home page container: centered with max-width */
++body:not(.home-locked) .realm-content {
++  max-width: 1200px;
++  margin-left: auto;
++  margin-right: auto;
++  padding-left: 24px;
++  padding-right: 24px;
++}
++
++@media (max-width: 767px) {
++  body:not(.home-locked) .realm-content {
++    padding-left: 16px;
++    padding-right: 16px;
++  }
++}
+\ No newline at end of file
+diff --git a/src/realms/CraftsRealm.tsx b/src/realms/CraftsRealm.tsx
+index 9cbc97a..bd13178 100644
+--- a/src/realms/CraftsRealm.tsx
++++ b/src/realms/CraftsRealm.tsx
+@@ -7,7 +7,7 @@ import './RealmStyles.css';
+  */
+ function CraftsRealm() {
+     return (
+-        <div className="realm crafts-realm">
++        <div className="realm crafts-realm realm-scroll-area">
+             <div className="realm-header">
+                 <h1 className="realm-title gradient-text">­ƒÄ¿ Crafts</h1>
+                 <p className="realm-subtitle">Create & Discover</p>
+diff --git a/src/realms/DiaryRealm.tsx b/src/realms/DiaryRealm.tsx
+index f824853..01751a9 100644
+--- a/src/realms/DiaryRealm.tsx
++++ b/src/realms/DiaryRealm.tsx
+@@ -7,7 +7,7 @@ import './RealmStyles.css';
+  */
+ function DiaryRealm() {
+     return (
+-        <div className="realm diary-realm">
++        <div className="realm diary-realm realm-scroll-area">
+             <div className="realm-header">
+                 <h1 className="realm-title gradient-text">­ƒö« Diary</h1>
+                 <p className="realm-subtitle">Your Secret Vault</p>
+diff --git a/src/realms/GamesRealm.tsx b/src/realms/GamesRealm.tsx
+index 0133ec8..4f0669d 100644
+--- a/src/realms/GamesRealm.tsx
++++ b/src/realms/GamesRealm.tsx
+@@ -7,7 +7,7 @@ import './RealmStyles.css';
+  */
+ function GamesRealm() {
+     return (
+-        <div className="realm games-realm">
++        <div className="realm games-realm realm-scroll-area">
+             <div className="realm-header">
+                 <h1 className="realm-title gradient-text">­ƒÄ« Games</h1>
+                 <p className="realm-subtitle">Play & Earn Stars</p>
+diff --git a/src/realms/MediaRealm.css b/src/realms/MediaRealm.css
+index cfacc68..46fa6f0 100644
+--- a/src/realms/MediaRealm.css
++++ b/src/realms/MediaRealm.css
+@@ -1,308 +1,433 @@
+ /* Media Realm & MediaCard Styles */
+ 
+ .media-realm {
+-    padding-bottom: 80px;
++    /* No manual padding needed here, handled by .realm-scroll-area */
+     height: 100%;
+     overflow-y: auto;
+     width: 100%;
++    background: radial-gradient(circle at top, #1a1a2e 0%, #0c0c14 100%);
+ }
+ 
+-.search-bar {
+-    margin: 20px auto;
+-    max-width: 500px;
+-    display: flex;
+-    padding: 4px 12px;
+-    border-radius: 25px;
+-    background: rgba(255, 255, 255, 0.05);
++.media-realm .realm-header {
++    margin-bottom: 24px;
+ }
+ 
+-.search-bar input {
+-    flex-grow: 1;
+-    background: none;
+-    border: none;
+-    color: white;
+-    padding: 8px;
+-    outline: none;
+-    font-size: 1rem;
++.realm-header {
++    padding: 24px 16px;
++    text-align: center;
+ }
+ 
+-.search-bar button {
+-    background: none;
+-    border: none;
+-    font-size: 1.2rem;
+-    cursor: pointer;
++.media-tab-display {
++    padding: 0;
++}
++
++.realm-title {
++    font-size: 2.2rem;
++    margin-bottom: 4px;
++    letter-spacing: -0.5px;
++}
++
++.realm-subtitle {
++    color: rgba(255, 255, 255, 0.6);
++    font-size: 0.9rem;
+ }
+ 
+-.realm-tabs {
++/* Tabs - Sticky at top of scroll container */
++.media-menu-tabs {
+     display: flex;
+     justify-content: center;
+-    gap: 10px;
+-    margin-bottom: 24px;
++    gap: 8px;
++    margin: 0 0 24px;
++    padding: 6px;
++    background: rgba(26, 26, 46, 0.95);
++    border-radius: 20px;
+     overflow-x: auto;
+-    padding: 4px;
++    scrollbar-width: none;
++    backdrop-filter: blur(10px);
++    position: sticky;
++    top: 0;
++    z-index: 10;
+ }
+ 
+-.realm-tabs button {
+-    background: rgba(255, 255, 255, 0.05);
+-    border: 1px solid rgba(255, 255, 255, 0.1);
++.media-menu-tabs::-webkit-scrollbar {
++    display: none;
++}
++
++.media-menu-tabs button {
++    background: transparent;
++    border: none;
+     color: rgba(255, 255, 255, 0.6);
+-    padding: 8px 16px;
+-    border-radius: 20px;
++    padding: 10px 20px;
++    border-radius: 16px;
+     cursor: pointer;
+     transition: all 0.2s ease;
+     white-space: nowrap;
++    font-weight: 700;
++    font-size: 0.95rem;
++    display: flex;
++    align-items: center;
++    gap: 8px;
+ }
+ 
+-.realm-tabs button.active {
+-    background: var(--accent-purple, #a855f7);
++.media-menu-tabs button:hover {
+     color: white;
+-    border-color: var(--accent-purple);
+-    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
++    background: rgba(255, 255, 255, 0.05);
+ }
+ 
+-.section-title {
+-    margin: 24px 0 16px;
+-    font-size: 1.4rem;
+-    color: #fff;
+-    text-align: center;
++.media-menu-tabs button.active {
++    background: white;
++    color: #1a1a2e;
++    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+ }
+ 
+-.media-grid {
+-    display: grid;
+-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+-    gap: 20px;
+-    padding: 10px;
++/* Shelf Layout */
++.media-shelf {
++    margin-bottom: 32px;
++    padding: 0 16px;
+ }
+ 
+-.no-items {
+-    grid-column: 1 / -1;
+-    text-align: center;
+-    padding: 40px;
+-    color: #888;
+-    font-style: italic;
++.shelf-title {
++    font-size: 1.3rem;
++    color: #fff;
++    margin-bottom: 16px;
++    padding-left: 4px;
++    font-weight: 700;
+ }
+ 
+-.loading-spinner {
+-    text-align: center;
+-    padding: 40px;
+-    color: var(--accent-pink, #ec4899);
+-    font-size: 1.2rem;
+-    animation: pulse 2s infinite;
++.shelf-row {
++    display: flex;
++    gap: 16px;
++    overflow-x: auto;
++    overflow-y: hidden;
++    padding: 8px 4px 20px;
++    scrollbar-width: none;
++    -ms-overflow-style: none;
+ }
+ 
+-.error-message {
+-    text-align: center;
+-    padding: 20px;
+-    color: #f87171;
+-    background: rgba(248, 113, 113, 0.1);
+-    border-radius: 8px;
++.shelf-row::-webkit-scrollbar {
++    display: none;
+ }
+ 
+-@keyframes pulse {
+-    0% {
+-        opacity: 0.6;
+-    }
++/* Heart Button */
++.heart-button {
++    position: absolute;
++    top: 8px;
++    right: 8px;
++    background: rgba(0, 0, 0, 0.5);
++    border: none;
++    width: 32px;
++    height: 32px;
++    border-radius: 50%;
++    display: flex;
++    align-items: center;
++    justify-content: center;
++    cursor: pointer;
++    z-index: 10;
++    transition: all 0.2s ease;
++    font-size: 1.1rem;
++    backdrop-filter: blur(4px);
++}
+ 
+-    50% {
+-        opacity: 1;
+-    }
++.heart-button:hover {
++    transform: scale(1.1);
++    background: rgba(0, 0, 0, 0.7);
++}
+ 
+-    100% {
+-        opacity: 0.6;
+-    }
++.heart-button.active {
++    color: #ef4444;
+ }
+ 
+-/* MediaCard Specific */
+-.media-card {
+-    display: flex;
+-    flex-direction: column;
+-    border-radius: 16px;
+-    overflow: hidden;
+-    transition: transform 0.3s ease, box-shadow 0.3s ease;
++/* Book Flip Card */
++.book-card-container {
++    flex: 0 0 160px;
++    height: 240px;
++    perspective: 1000px;
++    cursor: pointer;
++    contain: layout style;
++}
++
++.book-card-inner {
+     position: relative;
+-    background: rgba(255, 255, 255, 0.05);
+-    border: 1px solid rgba(255, 255, 255, 0.1);
++    width: 100%;
++    height: 100%;
++    text-align: center;
++    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
++    transform-style: preserve-3d;
+ }
+ 
+-.media-card:hover {
+-    transform: translateY(-4px);
+-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
++.book-card-container.flipped .book-card-inner {
++    transform: rotateY(180px);
+ }
+ 
+-.category-tag {
++/* Fixed flipping issue: translateZ(1px) helps with z-fighting */
++.book-card-front,
++.book-card-back {
+     position: absolute;
+-    top: 10px;
+-    left: 10px;
+-    background: var(--accent-purple, #a855f7);
+-    color: white;
+-    padding: 2px 8px;
++    width: 100%;
++    height: 100%;
++    -webkit-backface-visibility: hidden;
++    backface-visibility: hidden;
+     border-radius: 12px;
+-    font-size: 0.7rem;
+-    z-index: 10;
+-    text-transform: uppercase;
+-    font-weight: bold;
++    overflow: hidden;
++    background: #1e1e2e;
++    border: 1px solid rgba(255, 255, 255, 0.1);
++    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
++}
++
++.book-card-back {
++    transform: rotateY(180deg);
++    background: linear-gradient(135deg, #2d2d44 0%, #1e1e2e 100%);
++    padding: 16px;
++    display: flex;
++    flex-direction: column;
++    justify-content: space-between;
+ }
+ 
+-.card-top {
++.book-cover-container {
++    height: 180px;
++    width: 100%;
+     position: relative;
+-    aspect-ratio: 16 / 9;
+-    cursor: pointer;
+     background: #000;
+ }
+ 
+-.embed-container {
++.book-cover {
+     width: 100%;
+     height: 100%;
+-    position: relative;
++    object-fit: cover;
+ }
+ 
+-.embed-container iframe {
++.book-cover-placeholder {
+     width: 100%;
+     height: 100%;
++    display: flex;
++    align-items: center;
++    justify-content: center;
++    font-size: 3rem;
++    background: linear-gradient(45deg, #3b3b4f, #1e1e2e);
+ }
+ 
+-.close-embed {
+-    position: absolute;
+-    top: 5px;
+-    right: 5px;
+-    background: rgba(0, 0, 0, 0.5);
++.book-card-info {
++    padding: 8px;
++    background: #1e1e2e;
++}
++
++.book-title {
++    font-size: 0.85rem;
++    color: #fff;
++    font-weight: 600;
++    display: -webkit-box;
++    -webkit-line-clamp: 2;
++    line-clamp: 2;
++    -webkit-box-orient: vertical;
++    overflow: hidden;
++    line-height: 1.2;
++}
++
++.book-title-back {
++    font-size: 0.9rem;
++    color: #c084fc;
++    margin-bottom: 8px;
++    font-weight: 700;
++}
++
++.book-description {
++    font-size: 0.75rem;
++    color: rgba(255, 255, 255, 0.8);
++    display: -webkit-box;
++    -webkit-line-clamp: 6;
++    line-clamp: 6;
++    -webkit-box-orient: vertical;
++    overflow: hidden;
++    line-height: 1.4;
++    text-align: left;
++}
++
++.book-action-btn {
++    width: 100%;
++    padding: 8px;
++    background: var(--accent-blue, #3b82f6);
+     color: white;
+     border: none;
+-    width: 24px;
+-    height: 24px;
+-    border-radius: 50%;
+-    display: flex;
+-    align-items: center;
+-    justify-content: center;
++    border-radius: 6px;
++    font-size: 0.8rem;
++    font-weight: 700;
+     cursor: pointer;
+-    font-size: 1.2rem;
++    transition: transform 0.2s ease;
+ }
+ 
+-.cover-container {
+-    width: 100%;
+-    height: 100%;
+-    position: relative;
++.book-action-btn:active {
++    transform: scale(0.95);
+ }
+ 
+-.cover-image {
+-    width: 100%;
+-    height: 100%;
+-    object-fit: cover;
+-    opacity: 0.8;
+-    transition: opacity 0.3s ease;
++/* Video Card */
++.video-card {
++    flex: 0 0 240px;
++    background: #1e1e2e;
++    border-radius: 12px;
++    overflow: hidden;
++    border: 1px solid rgba(255, 255, 255, 0.1);
++    cursor: pointer;
++    transition: transform 0.3s ease;
++    contain: layout style;
+ }
+ 
+-.media-card:hover .cover-image {
+-    opacity: 1;
++.video-card:hover {
++    transform: translateY(-4px);
++}
++
++.video-thumbnail-container {
++    position: relative;
++    aspect-ratio: 16 / 9;
++    background: #000;
+ }
+ 
+-.cover-placeholder {
++.video-thumbnail {
+     width: 100%;
+     height: 100%;
+-    display: flex;
+-    align-items: center;
+-    justify-content: center;
+-    font-size: 3rem;
+-    background: linear-gradient(45deg, #2a2a2a, #1a1a1a);
++    object-fit: cover;
+ }
+ 
+-.play-overlay {
++.video-play-hint {
+     position: absolute;
+-    top: 0;
+-    left: 0;
+-    width: 100%;
+-    height: 100%;
++    top: 50%;
++    left: 50%;
++    transform: translate(-50%, -50%);
++    background: rgba(168, 85, 247, 0.8);
++    width: 48px;
++    height: 48px;
++    border-radius: 50%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+-    background: rgba(0, 0, 0, 0.3);
+     opacity: 0;
+     transition: opacity 0.3s ease;
+ }
+ 
+-.media-card:hover .play-overlay {
++.video-card:hover .video-play-hint {
+     opacity: 1;
+ }
+ 
+-.play-icon {
+-    background: var(--accent-pink, #ec4899);
++.play-icon-large {
+     color: white;
+-    padding: 8px 16px;
+-    border-radius: 20px;
+-    font-weight: bold;
+-    font-size: 0.9rem;
+-    box-shadow: 0 4px 12px rgba(236, 72, 153, 0.4);
++    font-size: 1.2rem;
++    margin-left: 3px;
+ }
+ 
+-.card-info {
+-    padding: 16px;
+-    flex-grow: 1;
+-    display: flex;
+-    flex-direction: column;
++.video-info {
++    padding: 12px;
+ }
+ 
+-.media-title {
+-    font-size: 1.1rem;
+-    margin-bottom: 8px;
++.video-title {
++    font-size: 0.9rem;
+     color: #fff;
+     display: -webkit-box;
+     -webkit-line-clamp: 2;
+     line-clamp: 2;
+     -webkit-box-orient: vertical;
+     overflow: hidden;
++    line-height: 1.3;
+ }
+ 
+-.media-description {
+-    font-size: 0.9rem;
+-    color: #ccc;
+-    margin-bottom: 16px;
+-    display: -webkit-box;
+-    -webkit-line-clamp: 3;
+-    line-clamp: 3;
+-    -webkit-box-orient: vertical;
+-    overflow: hidden;
+-    line-height: 1.4;
+-}
+-
+-.card-actions {
+-    margin-top: auto;
++/* Video Modal */
++.video-modal-overlay {
++    position: fixed;
++    top: 0;
++    left: 0;
++    width: 100%;
++    height: 100%;
++    background: rgba(0, 0, 0, 0.9);
++    z-index: 1000;
+     display: flex;
+-    flex-direction: column;
+-    gap: 10px;
++    align-items: center;
++    justify-content: center;
++    padding: 20px;
++    backdrop-filter: blur(8px);
+ }
+ 
+-.complete-btn {
++.video-modal-content {
+     width: 100%;
+-    padding: 10px;
+-    border-radius: 8px;
+-    border: none;
+-    background: var(--accent-blue, #3b82f6);
++    max-width: 800px;
++    background: #1e1e2e;
++    border-radius: 16px;
++    overflow: hidden;
++    position: relative;
++    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
++}
++
++.modal-close-btn {
++    position: absolute;
++    top: 12px;
++    right: 12px;
++    background: rgba(255, 255, 255, 0.1);
+     color: white;
+-    font-weight: bold;
++    border: none;
++    width: 32px;
++    height: 32px;
++    border-radius: 50%;
+     cursor: pointer;
+-    transition: all 0.2s ease;
++    font-size: 1.5rem;
++    z-index: 10;
+ }
+ 
+-.complete-btn:hover:not(:disabled) {
+-    filter: brightness(1.1);
+-    transform: scale(1.02);
++.video-embed-wrapper {
++    width: 100%;
++    aspect-ratio: 16 / 9;
+ }
+ 
+-.complete-btn.done {
+-    background: rgba(255, 255, 255, 0.1);
+-    color: rgba(255, 255, 255, 0.5);
+-    cursor: default;
++.video-embed-wrapper iframe {
++    width: 100%;
++    height: 100%;
+ }
+ 
+-.external-link {
+-    text-align: center;
+-    font-size: 0.8rem;
+-    color: #aaa;
++.video-modal-info {
++    padding: 20px;
++    background: #1e1e2e;
++}
++
++.video-modal-title {
++    font-size: 1.2rem;
++    color: #fff;
++    margin-bottom: 12px;
++}
++
++.open-youtube-link {
++    color: #a855f7;
+     text-decoration: none;
++    font-size: 0.9rem;
++    font-weight: 600;
+ }
+ 
+-.offline-notice {
+-    font-size: 0.75rem;
+-    color: #f87171;
++/* Empty States */
++.empty-state {
++    text-align: center;
++    padding: 60px 20px;
++    color: rgba(255, 255, 255, 0.4);
++}
++
++.empty-icon {
++    font-size: 3rem;
++    margin-bottom: 16px;
++    display: block;
++}
++
++@keyframes pulse {
++    0% {
++        opacity: 0.6;
++    }
++
++    50% {
++        opacity: 1;
++    }
++
++    100% {
++        opacity: 0.6;
++    }
++}
++
++.loading-spinner {
+     text-align: center;
++    padding: 40px;
++    color: #a855f7;
++    font-size: 1.2rem;
++    animation: pulse 2s infinite;
+ }
+\ No newline at end of file
+diff --git a/src/realms/MediaRealm.tsx b/src/realms/MediaRealm.tsx
+index 004cd65..060e909 100644
+--- a/src/realms/MediaRealm.tsx
++++ b/src/realms/MediaRealm.tsx
+@@ -1,176 +1,220 @@
+ import React, { useState, useEffect } from 'react';
+-import './RealmStyles.css';
+-import MediaCard from '../components/MediaCard';
+-import { searchArchive, ArchiveItem } from '../services/archiveSearch';
+-import { db } from '../services/db';
++import './MediaRealm.css';
++import MediaMenuTabs, { MediaTab } from '../components/Media/MediaMenuTabs';
++import MediaShelf from '../components/Media/MediaShelf';
++import BookFlipCard from '../components/Media/BookFlipCard';
++import VideoCard from '../components/Media/VideoCard';
++import VideoModal from '../components/Media/VideoModal';
++import { MediaLibraryService } from '../services/MediaLibraryService';
++import { MediaLibraryItem } from '../services/db';
++
+ 
+ // Import seed data
+ import bookSeeds from '../content/media_books_seed.json';
+ import videoSeeds from '../content/media_youtube_seed.json';
+ 
+-type Tab = 'featured' | 'books' | 'videos' | 'search' | 'completed';
++// Safe import for trending (might not exist)
++let trendingData: any = { items: [] };
++try {
++    trendingData = require('../content/media_amazon_trending.json');
++} catch (e) {
++    console.warn('[MediaRealm] Trending data file not found');
++}
+ 
+ function MediaRealm() {
+-    const [activeTab, setActiveTab] = useState<Tab>('featured');
+-    const [searchQuery, setSearchQuery] = useState('');
+-    const [searchResults, setSearchResults] = useState<ArchiveItem[]>([]);
+-    const [isSearching, setIsSearching] = useState(false);
+-    const [searchError, setSearchError] = useState<string | null>(null);
+-    const [completedItems, setCompletedItems] = useState<string[]>([]);
+-
+-    // Load completed items on mount
++    const [activeTab, setActiveTab] = useState<MediaTab>('videos');
++    const [library, setLibrary] = useState<MediaLibraryItem[]>([]);
++    const [selectedVideo, setSelectedVideo] = useState<{ id: string, title: string } | null>(null);
++
+     useEffect(() => {
+-        const loadCompleted = async () => {
+-            const completed = await db.mediaCompletions.toArray();
+-            setCompletedItems(completed.map(c => c.mediaId));
+-        };
+-        loadCompleted();
+-
+-        // Subscribe to DB changes to keep "Completed" tab in sync
+-        const interval = setInterval(loadCompleted, 5000); // Simple polling for now
+-        return () => clearInterval(interval);
++        loadLibrary();
+     }, []);
+ 
+-    const handleSearch = async (e: React.FormEvent) => {
+-        e.preventDefault();
+-        if (!searchQuery.trim()) return;
+-
+-        setIsSearching(true);
+-        setSearchError(null);
+-        setActiveTab('search');
+-
+-        try {
+-            // Check cache first
+-            const cached = await db.mediaSearchCache.get(searchQuery);
+-            if (cached && (Date.now() - cached.timestamp < 3600000)) { // 1 hour cache
+-                setSearchResults(cached.results);
+-                setIsSearching(false);
+-                return;
+-            }
+-
+-            const result = await searchArchive(searchQuery);
+-            setSearchResults(result.items);
+-
+-            // Update cache
+-            await db.mediaSearchCache.put({
+-                query: searchQuery,
+-                results: result.items,
+-                timestamp: Date.now()
+-            });
+-        } catch (err: any) {
+-            setSearchError(err.message || 'Search failed');
+-        } finally {
+-            setIsSearching(false);
+-        }
++    const loadLibrary = async () => {
++        const items = await MediaLibraryService.getLibraryItems();
++        setLibrary(items);
+     };
+ 
+-    const renderGrid = (items: any[]) => (
+-        <div className="media-grid">
+-            {items.map((item) => (
+-                <MediaCard
+-                    key={item.id}
+-                    id={item.id}
+-                    title={item.title}
+-                    type={item.type || (item.id.startsWith('ia:') ? 'book' : 'video')}
+-                    coverImage={item.coverImage}
+-                    category={item.category}
+-                    about={item.about || item.description}
+-                    identifier={item.identifier}
+-                    videoId={item.videoId}
+-                    isCompletedInitial={completedItems.includes(item.id)}
+-                />
+-            ))}
+-            {items.length === 0 && <p className="no-items">No items found in this section.</p>}
+-        </div>
+-    );
++    const toggleSave = async (item: Omit<MediaLibraryItem, 'savedAt'>) => {
++        await MediaLibraryService.toggleLibraryItem(item);
++        loadLibrary();
++    };
+ 
+-    const getCompletedContent = () => {
+-        const allSeeds = [...bookSeeds, ...videoSeeds];
+-        const completedSeeds = allSeeds.filter(s => completedItems.includes(s.id));
+-        const completedArchive = searchResults.filter(r => completedItems.includes(r.id));
++    const isSaved = (id: string) => library.some(i => i.id === id);
+ 
+-        // Combine and deduplicate
+-        const uniqueItems = [...completedSeeds];
+-        completedArchive.forEach(item => {
+-            if (!uniqueItems.some(u => u.id === item.id)) {
+-                uniqueItems.push(item as any);
+-            }
+-        });
++    const openVideo = (id: string, title: string) => {
++        setSelectedVideo({ id, title });
++    };
+ 
+-        return renderGrid(uniqueItems);
++    const renderVideos = () => {
++        // Group videos by category if possible, or just one big shelf
++        const categories = Array.from(new Set(videoSeeds.map(v => v.category)));
++
++        return (
++            <div className="tab-content">
++                {categories.map(cat => (
++                    <MediaShelf key={cat} title={cat}>
++                        {videoSeeds.filter(v => v.category === cat).map(v => (
++                            <VideoCard
++                                key={v.id}
++                                id={v.id}
++                                title={v.title}
++                                videoId={v.videoId}
++                                isSaved={isSaved(v.id)}
++                                onPlay={() => openVideo(v.videoId, v.title)}
++                                onToggleSave={() => toggleSave({
++                                    id: v.id,
++                                    type: 'video',
++                                    title: v.title,
++                                    linkUrl: `https://www.youtube.com/watch?v=${v.videoId}`
++                                })}
++                            />
++                        ))}
++                    </MediaShelf>
++                ))}
++            </div>
++        );
+     };
+ 
+-    return (
+-        <div className="realm media-realm">
+-            <div className="realm-header">
+-                <h1 className="realm-title gradient-text">­ƒôÜ Media Center</h1>
+-                <p className="realm-subtitle">Stories, Lessons & Magic</p>
+-
+-                <form className="search-bar glass" onSubmit={handleSearch}>
+-                    <input
+-                        type="text"
+-                        placeholder="Search for a book or story..."
+-                        value={searchQuery}
+-                        onChange={(e) => setSearchQuery(e.target.value)}
+-                    />
+-                    <button type="submit" disabled={isSearching}>
+-                        {isSearching ? '...' : '­ƒöì'}
+-                    </button>
+-                </form>
++    const renderClassicBooks = () => {
++        return (
++            <div className="tab-content">
++                <MediaShelf title="Timeless Tales">
++                    {bookSeeds.map(b => (
++                        <BookFlipCard
++                            key={b.id}
++                            id={b.id}
++                            title={b.title}
++                            description="A classic story from the Internet Archive collection."
++                            imageUrl={b.coverImage}
++                            actionLabel="Read"
++                            isSaved={isSaved(b.id)}
++                            onAction={() => window.open(`https://archive.org/details/${b.identifier}`, '_blank')}
++                            onToggleSave={() => toggleSave({
++                                id: b.id,
++                                type: 'book',
++                                title: b.title,
++                                imageUrl: b.coverImage,
++                                linkUrl: `https://archive.org/details/${b.identifier}`
++                            })}
++                        />
++                    ))}
++                </MediaShelf>
+             </div>
++        );
++    };
+ 
+-            <nav className="realm-tabs">
+-                <button className={activeTab === 'featured' ? 'active' : ''} onClick={() => setActiveTab('featured')}>Featured</button>
+-                <button className={activeTab === 'books' ? 'active' : ''} onClick={() => setActiveTab('books')}>Books</button>
+-                <button className={activeTab === 'videos' ? 'active' : ''} onClick={() => setActiveTab('videos')}>Videos</button>
+-                <button className={activeTab === 'completed' ? 'active' : ''} onClick={() => setActiveTab('completed')}>Ô¡É Done ({completedItems.length})</button>
+-                {searchResults.length > 0 && (
+-                    <button className={activeTab === 'search' ? 'active' : ''} onClick={() => setActiveTab('search')}>Results</button>
+-                )}
+-            </nav>
+-
+-            <div className="realm-content">
+-                {activeTab === 'featured' && (
+-                    <div className="featured-section">
+-                        <h2 className="section-title">Ô£¿ Recommended for You</h2>
+-                        {renderGrid([...bookSeeds.slice(0, 3), ...videoSeeds.slice(0, 3)])}
+-                    </div>
+-                )}
++    const renderTrending = () => {
++        if (!trendingData.items || trendingData.items.length === 0) {
++            return (
++                <div className="empty-state">
++                    <span className="empty-icon">Ô£¿</span>
++                    <p>New magic is on its way. Check back soon!</p>
++                </div>
++            );
++        }
+ 
+-                {activeTab === 'books' && (
+-                    <div className="books-section">
+-                        <h2 className="section-title">­ƒôû Magical Library</h2>
+-                        {renderGrid(bookSeeds as any)}
+-                    </div>
+-                )}
++        return (
++            <div className="tab-content">
++                <MediaShelf title="New Releases">
++                    {trendingData.items.map((b: any) => (
++                        <BookFlipCard
++                            key={b.id}
++                            id={b.id}
++                            title={b.title}
++                            description={b.author ? `By ${b.author}. ${b.format || ''}` : 'Trending new release.'}
++                            imageUrl={b.imageUrl}
++                            actionLabel="Amazon"
++                            isSaved={isSaved(b.id)}
++                            onAction={() => window.open(b.amazonUrl, '_blank')}
++                            onToggleSave={() => toggleSave({
++                                id: b.id,
++                                type: 'trending',
++                                title: b.title,
++                                imageUrl: b.imageUrl,
++                                linkUrl: b.amazonUrl
++                            })}
++                        />
++                    ))}
++                </MediaShelf>
++            </div>
++        );
++    };
+ 
+-                {activeTab === 'videos' && (
+-                    <div className="videos-section">
+-                        <h2 className="section-title">­ƒÄ¼ Enchanting Videos</h2>
+-                        {renderGrid(videoSeeds as any)}
+-                    </div>
+-                )}
++    const renderLibrary = () => {
++        if (library.length === 0) {
++            return (
++                <div className="empty-state">
++                    <span className="empty-icon">­ƒÆû</span>
++                    <p>Your library is empty. Save items to see them here!</p>
++                </div>
++            );
++        }
+ 
+-                {activeTab === 'search' && (
+-                    <div className="search-section">
+-                        <h2 className="section-title">­ƒöì Search Results for "{searchQuery}"</h2>
+-                        {isSearching ? (
+-                            <div className="loading-spinner">Ô£¿ Casting search spell... Ô£¿</div>
+-                        ) : searchError ? (
+-                            <div className="error-message">{searchError}</div>
+-                        ) : (
+-                            renderGrid(searchResults)
+-                        )}
+-                    </div>
++        const videos = library.filter(i => i.type === 'video');
++        const books = library.filter(i => i.type === 'book' || i.type === 'trending');
++
++        return (
++            <div className="tab-content">
++                {videos.length > 0 && (
++                    <MediaShelf title="Saved Videos">
++                        {videos.map(v => (
++                            <VideoCard
++                                key={v.id}
++                                id={v.id}
++                                title={v.title}
++                                videoId={v.id.split(':')[1]} // yt:ID
++                                isSaved={true}
++                                onPlay={() => openVideo(v.id.split(':')[1], v.title)}
++                                onToggleSave={() => toggleSave(v)}
++                            />
++                        ))}
++                    </MediaShelf>
+                 )}
+-
+-                {activeTab === 'completed' && (
+-                    <div className="completed-section">
+-                        <h2 className="section-title">Ô¡É Your Collection</h2>
+-                        {getCompletedContent()}
+-                    </div>
++                {books.length > 0 && (
++                    <MediaShelf title="Saved Books">
++                        {books.map(b => (
++                            <BookFlipCard
++                                key={b.id}
++                                id={b.id}
++                                title={b.title}
++                                description="Your saved favorite."
++                                imageUrl={b.imageUrl}
++                                actionLabel={b.type === 'book' ? 'Read' : 'Amazon'}
++                                isSaved={true}
++                                onAction={() => window.open(b.linkUrl, '_blank')}
++                                onToggleSave={() => toggleSave(b)}
++                            />
++                        ))}
++                    </MediaShelf>
+                 )}
+             </div>
++        );
++    };
++
++    return (
++        <div className="realm media-realm realm-scroll-area">
++            <div className="realm-header">
++                <h1 className="realm-title gradient-text">Ô£¿ Media Magic</h1>
++                <p className="realm-subtitle">Discover stories, videos, and more</p>
++            </div>
++
++            <MediaMenuTabs activeTab={activeTab} onTabChange={setActiveTab} />
++
++            <div className="media-tab-display">
++                {activeTab === 'videos' && renderVideos()}
++                {activeTab === 'classic' && renderClassicBooks()}
++                {activeTab === 'trending' && renderTrending()}
++                {activeTab === 'library' && renderLibrary()}
++            </div>
++
++            {selectedVideo && (
++                <VideoModal
++                    title={selectedVideo.title}
++                    videoId={selectedVideo.id}
++                    onClose={() => setSelectedVideo(null)}
++                />
++            )}
+         </div>
+     );
+ }
+diff --git a/src/realms/RealmStyles.css b/src/realms/RealmStyles.css
+index 36a0bfe..f32a3b8 100644
+--- a/src/realms/RealmStyles.css
++++ b/src/realms/RealmStyles.css
+@@ -5,8 +5,24 @@
+     flex-direction: column;
+     gap: 1rem;
+     height: 100%;
+-    padding: 1rem;
+-    overflow-y: auto;
++}
++
++/* Shared scroll container for non-Home realms */
++.realm-scroll-area {
++    overflow-y: auto !important;
++    overflow-x: hidden;
++    height: 100%;
++    padding: 80px 16px 100px;
++    display: flex;
++    flex-direction: column;
++    gap: 1.5rem;
++    box-sizing: border-box;
++    scrollbar-width: none;
++    -ms-overflow-style: none;
++}
++
++.realm-scroll-area::-webkit-scrollbar {
++    display: none;
+ }
+ 
+ .realm-header {
+diff --git a/src/services/db.ts b/src/services/db.ts
+index 25a70f3..ed3c997 100644
+--- a/src/services/db.ts
++++ b/src/services/db.ts
+@@ -31,6 +31,15 @@ export interface MediaSearchCache {
+     timestamp: number;
+ }
+ 
++export interface MediaLibraryItem {
++    id: string; // mediaId
++    type: 'video' | 'book' | 'trending';
++    title: string;
++    imageUrl?: string;
++    linkUrl?: string; // IA link, Amazon link, or YT link
++    savedAt: number;
++}
++
+ export class SparkleDatabase extends Dexie {
+     // Tables
+     progression!: Table<{ key: string; data: ProgressionState }, string>;
+@@ -39,6 +48,7 @@ export class SparkleDatabase extends Dexie {
+     clues!: Table<StoredClue, string>;
+     mediaCompletions!: Table<MediaCompletion, string>;
+     mediaSearchCache!: Table<MediaSearchCache, string>;
++    mediaLibrary!: Table<MediaLibraryItem, string>;
+ 
+     constructor() {
+         super('SparkleWorldDB');
+@@ -55,6 +65,10 @@ export class SparkleDatabase extends Dexie {
+             mediaCompletions: 'mediaId',
+             mediaSearchCache: 'query'
+         });
++
++        this.version(3).stores({
++            mediaLibrary: 'id, type, savedAt'
++        });
+     }
+ }
+ 
+diff --git a/src/slots/trophySlots.ts b/src/slots/trophySlots.ts
+index b1e0111..d4ad174 100644
+--- a/src/slots/trophySlots.ts
++++ b/src/slots/trophySlots.ts
+@@ -27,7 +27,7 @@ export const SIT_OFFSET = 8;
+ 
+ // SHELF_LIPS Constants
+ export const SHELF_LIPS = {
+-    TOP: 380,
++    TOP: 378,
+     SHELF3: 470,
+     SHELF2: 564,
+     SHELF1: 653,
+@@ -52,15 +52,15 @@ export const TROPHY_SLOTS: SlotAnchor[] = [
+     },
+     {
+         "id": "ts_p3",
+-        "anchorX": 268,
+-        "anchorY": 370,
++        "anchorX": 30,
++        "anchorY": 722,
+         "hitW": 50,
+         "hitH": 60
+     },
+     {
+         "id": "ts_owl",
+-        "anchorX": 25,
+-        "anchorY": 723,
++        "anchorX": 267,
++        "anchorY": 371,
+         "hitW": 50,
+         "hitH": 70
+     },
+@@ -87,8 +87,8 @@ export const TROPHY_SLOTS: SlotAnchor[] = [
+     },
+     {
+         "id": "rt_tower_p1",
+-        "anchorX": 365,
+-        "anchorY": 463,
++        "anchorX": 361,
++        "anchorY": 466,
+         "hitW": 25,
+         "hitH": 40
+     },
+@@ -185,8 +185,8 @@ export const TROPHY_SLOTS: SlotAnchor[] = [
+     },
+     {
+         "id": "bs_p2",
+-        "anchorX": 195,
+-        "anchorY": 724,
++        "anchorX": 346,
++        "anchorY": 731,
+         "hitW": 50,
+         "hitH": 60
+     },
+@@ -199,8 +199,8 @@ export const TROPHY_SLOTS: SlotAnchor[] = [
+     },
+     {
+         "id": "bs_egg",
+-        "anchorX": 359,
+-        "anchorY": 721,
++        "anchorX": 193,
++        "anchorY": 729,
+         "hitW": 50,
+         "hitH": 70
+     }
